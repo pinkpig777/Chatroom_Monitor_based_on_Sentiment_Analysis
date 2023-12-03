@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+
+
+<title>bs4 simple chat app - Bootdey.com</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+<body>
+  {% extends 'base.html' %}
+
+  {% block content %}
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <div class="container">
+
+    <!-- Page header start -->
+    <div class="page-title">
+      <div class="row gutters">
+          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+              <h5 class="title">Chat App</h5>
+          </div>
+          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12"> </div>
+      </div>
+      <head>
+        <link
+        rel="stylesheet"
+        href="{{url_for('static', filename='css/test.css')}}"
+        />
+      </head>
+  </div>
+  <!-- Page header end -->
+
+    <!-- Content wrapper start -->
+  <div class="content-wrapper">
+
+    <!-- Row start -->
+    <div class="row gutters">
+
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        
+        <div class="card m-0">
+          
+          <!-- Row start -->
+          <div class="row no-gutters">
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-3 col-3">
+              <div class="users-container">
+                <div class="chat-search-box">
+                  <div class="input-group">
+                    <input class="form-control" placeholder="Search">
+                    <div class="input-group-btn">
+                      <button type="button" class="btn btn-info">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <ul class="users">
+                  <li class="person" data-chat="person1">
+                    <div class="user">
+                      <img src="https://www.bootdey.com/img/Content/avatar/avatar3.png" alt="Retail Admin">
+                      <span class="status busy"></span>
+                    </div>
+                    <p class="name-time">
+                      <span class="name">Steve Bangalter</span>
+                      <span class="time">15/02/2019</span>
+                    </p>
+                  </li>
+                  <li class="person" data-chat="person1">
+                    <div class="user">
+                      <img src="https://www.bootdey.com/img/Content/avatar/avatar1.png" alt="Retail Admin">
+                      <span class="status offline"></span>
+                    </div>
+                    <p class="name-time">
+                      <span class="name">Steve Bangalter</span>
+                      <span class="time">15/02/2019</span>
+                    </p>
+                  </li>
+                  <li class="person active-user" data-chat="person2">
+                    <div class="user">
+                      <img src="https://www.bootdey.com/img/Content/avatar/avatar2.png" alt="Retail Admin">
+                      <span class="status away"></span>
+                    </div>
+                    <p class="name-time">
+                      <span class="name">Peter Gregor</span>
+                      <span class="time">12/02/2019</span>
+                    </p>
+                  </li>
+                  <li class="person" data-chat="person3">
+                    <div class="user">
+                      <img src="https://www.bootdey.com/img/Content/avatar/avatar3.png" alt="Retail Admin">
+                      <span class="status busy"></span>
+                    </div>
+                    <p class="name-time">
+                      <span class="name">Jessica Larson</span>
+                      <span class="time">11/02/2019</span>
+                    </p>
+                  </li>
+                  <li class="person" data-chat="person4">
+                    <div class="user">
+                      <img src="https://www.bootdey.com/img/Content/avatar/avatar4.png" alt="Retail Admin">
+                      <span class="status offline"></span>
+                    </div>
+                    <p class="name-time">
+                      <span class="name">Lisa Guerrero</span>
+                      <span class="time">08/02/2019</span>
+                    </p>
+                  </li>
+                  <li class="person" data-chat="person5">
+                    <div class="user">
+                      <img src="https://www.bootdey.com/img/Content/avatar/avatar5.png" alt="Retail Admin">
+                      <span class="status away"></span>
+                    </div>
+                    <p class="name-time">
+                      <span class="name">Michael Jordan</span>
+                      <span class="time">05/02/2019</span>
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-9 col-9">
+              <div class="selected-user">
+                <h2>Chat Room: {{code}}</h2>
+              </div>
+              <div class="chat-container">
+                <ul class="chat-box chatContainerScroll">
+                  <div class="messages" id="messages"></div>
+                </ul>
+    
+              </div>
+              <div class="form-group mt-3 mb-0" style="position: absolute; bottom: 0; width: 100%;">
+                <div id="typing-indicator"></div>
+                <div class="no" style="display: flex; align-items: center;">
+                  <input class="form-control" rows="3" type="text" rows="3" placeholder="Message" name="message" id="message" />
+                  <button type="button" name="send" id="send-btn" onClick="sendMessage()">
+                    Send
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Row end -->
+        </div>
+      </div>
+    </div>
+    <!-- Row end -->
+  </div>
+  <!-- Content wrapper end -->
+  <script type="text/javascript">
+    var socketio = io();
+    var typingTimer;
+    var predata;
+    const messages = document.getElementById("messages");
+    document.getElementById("message").addEventListener("input", function (event) {
+      var message = event.target.value;
+      clearTimeout(typingTimer);
+      typingTimer = setTimeout(function () {
+        var typingIndicator = document.getElementById('typing-indicator');
+        typingIndicator.innerHTML = '<p>' + message + ' is typing...</p>';
+        socketio.emit('typing', { 'message': message });
+      }, 2000);
+    });
+    const createMessage = (name, msg, username) => {
+      const textAlign = 'left';
+        const content = (msg == 'has entered the room')?`
+                <div class="text">
+                    <span style="textAlign: ${textAlign};">
+                        <strong>${name}</strong> ${msg}
+                    </span>
+                    <span class="muted">
+                        ${new Date().toLocaleString()}
+                    </span>
+                </div>
+                `:
+                `<li class="chat-left">
+                      <div class="chat-avatar">
+                        <img src="https://www.bootdey.com/img/Content/avatar/avatar3.png" alt="Retail Admin">
+                        <div class="chat-name">${name}</div>
+                      </div>
+                      <div class="chat-text">${msg}</div>
+                      <div class="chat-hour">${new Date().toLocaleString()}<span class="fa fa-check-circle"></span></div>
+                  </li>
+                `;
+        messages.innerHTML += content;
+      };
+    socketio.on("message", (data) => {
+      //var name = socketio.emit("name");
+      //const isSelf = data.name === name; // Replace with your actual username
+      createMessage(data.name, data.message, data.user);
+    });
+    const sendMessage = () => {
+      const message = document.getElementById("message");
+      if (message.value == "") return;
+      socketio.emit("message", { data: message.value });
+      message.value = "";
+    };
+  </script>
+  {% for msg in messages %}
+  <script type="text/javascript">
+    createMessage("{{msg.name}}", "{{msg.message}}");
+  </script>
+  {% endfor %}
+  {% endblock %}
+</body>
