@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 from flask_socketio import join_room, leave_room, send, SocketIO, emit
 import random
 from string import ascii_uppercase
+import json
+import datetime
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "hjhjsdahhds"
@@ -45,6 +47,14 @@ def room():
         return redirect(url_for("home"))
 
     return render_template("room.html", code=room, messages=rooms[room]["messages"])
+
+@app.route('/process_message', methods=['POST'])  ##連接部分##
+def process_message():
+    data = request.json
+    message = data.get('message') #get 前端的現在訊息
+
+    response_data = {"result": f"Received message: {message}"} #f後都在回傳到顯示的地方
+    return jsonify(response_data)
 
 @socketio.on("message")
 def message(data):   
@@ -91,10 +101,7 @@ def disconnect():
     send({"name": name, "message": "has left the room"}, to=room)
     print(f"{name} has left the room {room}")
 
-@socketio.on("typing")
-def typing(data):
-    #message = session.get("message")
-    print(data)
+
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)

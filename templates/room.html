@@ -49,7 +49,7 @@
               <div class="users-container">
                 <div class="chat-search-box">
                   <div class="input-group">
-                    <input class="form-control" placeholder="Search">
+                    <input class="form-control" placeholder="Search" style="width: 100px;">
                     <div class="input-group-btn">
                       <button type="button" class="btn btn-info">
                         <i class="fa fa-search"></i>
@@ -60,62 +60,62 @@
                 <ul class="users">
                   <li class="person" data-chat="person1">
                     <div class="user">
-                      <img src="https://www.bootdey.com/img/Content/avatar/avatar3.png" alt="Retail Admin">
+                      <img src="{{url_for('static', filename='img/1.png')}}">
                       <span class="status busy"></span>
                     </div>
                     <p class="name-time">
-                      <span class="name">Steve Bangalter</span>
-                      <span class="time">15/02/2019</span>
+                      <span class="name">team 13 (3)</span>
+                      <span class="time">12/12</span>
                     </p>
                   </li>
                   <li class="person" data-chat="person1">
                     <div class="user">
-                      <img src="https://www.bootdey.com/img/Content/avatar/avatar1.png" alt="Retail Admin">
+                      <img src="{{url_for('static', filename='img/2.png')}}">
                       <span class="status offline"></span>
                     </div>
                     <p class="name-time">
-                      <span class="name">Steve Bangalter</span>
-                      <span class="time">15/02/2019</span>
+                      <span class="name">work team (15)</span>
+                      <span class="time">12/02 </span>
                     </p>
                   </li>
                   <li class="person active-user" data-chat="person2">
                     <div class="user">
-                      <img src="https://www.bootdey.com/img/Content/avatar/avatar2.png" alt="Retail Admin">
-                      <span class="status away"></span>
+                      <img src="{{url_for('static', filename='img/3.png')}}">
+                      <span class="status busy"></span>
                     </div>
                     <p class="name-time">
-                      <span class="name">Peter Gregor</span>
-                      <span class="time">12/02/2019</span>
+                      <span class="name">family (5)</span>
+                      <span class="time">12/02  </span>
                     </p>
                   </li>
                   <li class="person" data-chat="person3">
                     <div class="user">
-                      <img src="https://www.bootdey.com/img/Content/avatar/avatar3.png" alt="Retail Admin">
+                      <img src="{{url_for('static', filename='img/4.png')}}">
                       <span class="status busy"></span>
                     </div>
                     <p class="name-time">
-                      <span class="name">Jessica Larson</span>
-                      <span class="time">11/02/2019</span>
+                      <span class="name">friends (8)</span>
+                      <span class="time">12/02 </span>
                     </p>
                   </li>
                   <li class="person" data-chat="person4">
                     <div class="user">
-                      <img src="https://www.bootdey.com/img/Content/avatar/avatar4.png" alt="Retail Admin">
+                      <img src="{{url_for('static', filename='img/1.png')}}">
                       <span class="status offline"></span>
                     </div>
                     <p class="name-time">
-                      <span class="name">Lisa Guerrero</span>
-                      <span class="time">08/02/2019</span>
+                      <span class="name">meeting (6)</span>
+                      <span class="time">08/03 </span>
                     </p>
                   </li>
-                  <li class="person" data-chat="person5">
+                  <li class="person" data-chat="person4">
                     <div class="user">
-                      <img src="https://www.bootdey.com/img/Content/avatar/avatar5.png" alt="Retail Admin">
-                      <span class="status away"></span>
+                      <img src="{{url_for('static', filename='img/5.png')}}">
+                      <span class="status offline"></span>
                     </div>
                     <p class="name-time">
-                      <span class="name">Michael Jordan</span>
-                      <span class="time">05/02/2019</span>
+                      <span class="name">private (3)</span>
+                      <span class="time">08/02 </span>
                     </p>
                   </li>
                 </ul>
@@ -132,7 +132,7 @@
     
               </div>
               <div class="form-group mt-3 mb-0" style="position: absolute; bottom: 0; width: 100%;">
-                <div id="typing-indicator"></div>
+                <div id="typing-indicator" class = "word"></div>
                 <div class="no" style="display: flex; align-items: center;">
                   <input class="form-control" rows="3" type="text" rows="3" placeholder="Message" name="message" id="message" />
                   <button type="button" name="send" id="send-btn" onClick="sendMessage()">
@@ -153,32 +153,64 @@
     var socketio = io();
     var typingTimer;
     var predata;
+    var recent;
+
+
+
+    function handletyping(message, callback) {
+      clearTimeout(typingTimer);
+      typingTimer = setTimeout(function () {
+          fetch('/process_message', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  message: message, //傳入現在訊息
+              }),
+          })
+          .then(response => response.json())
+          .then(data => {
+              callback(data.result); //回傳地方
+          })
+          .catch(error => console.error('Error:', error));
+      }, 500); //每0.5秒傳入一次
+  }
+
+    
     const messages = document.getElementById("messages");
     document.getElementById("message").addEventListener("input", function (event) {
       var message = event.target.value;
-      clearTimeout(typingTimer);
-      typingTimer = setTimeout(function () {
-        var typingIndicator = document.getElementById('typing-indicator');
-        typingIndicator.innerHTML = '<p>' + message + ' is typing...</p>';
-        socketio.emit('typing', { 'message': message });
-      }, 2000);
+      var now_mes;
+      var typingIndicator = document.getElementById('typing-indicator');
+
+      //now_mes = handletyping(message);
+
+      handletyping(message, function(data) {
+        if(data == '') typingIndicator.innerHTML = 'nothing is typing...</p>';
+        else typingIndicator.innerHTML = '<p>' + data ;
+      });
+
+      
     });
     const createMessage = (name, msg, username) => {
       const textAlign = 'left';
-        const content = (msg == 'has entered the room')?`
-                <div class="text">
+      console.log(msg);
+        const content = (msg == 'has entered the room' || msg == 'has left the room')?`
+                <li class="chat-left" style = "margin-top: 10px; margin-bottom: 10px;">
+                  <div>
                     <span style="textAlign: ${textAlign};">
                         <strong>${name}</strong> ${msg}
                     </span>
                     <span class="muted">
                         ${new Date().toLocaleString()}
                     </span>
-                </div>
+                  </div>
+                </li>
                 `:
-                `<li class="chat-left">
+                `<li class="chat-left" style = "margin-top: 5px; margin-bottom: 5px;">
                       <div class="chat-avatar">
-                        <img src="https://www.bootdey.com/img/Content/avatar/avatar3.png" alt="Retail Admin">
-                        <div class="chat-name">${name}</div>
+                        <div class="chat-name">${name} </div>
                       </div>
                       <div class="chat-text">${msg}</div>
                       <div class="chat-hour">${new Date().toLocaleString()}<span class="fa fa-check-circle"></span></div>
@@ -196,6 +228,13 @@
       if (message.value == "") return;
       socketio.emit("message", { data: message.value });
       message.value = "";
+      handletyping('', function(data) {
+        // 在這裡處理回傳值 data
+        //console.log(data);
+        var typingIndicator = document.getElementById('typing-indicator');  
+        if(data == '') typingIndicator.innerHTML = 'nothing is typing...</p>';
+        else typingIndicator.innerHTML = '<p>' + data ;
+      });
     };
   </script>
   {% for msg in messages %}
