@@ -32,4 +32,4 @@ and place it under current directory.
 
 ## Application Example
 
-{%youtube XrVSxAahRg8 %}
+[![Alt text for your video](http://img.youtube.com/vi/XrVSxAahRg8/0.jpg)](https://www.youtube.com/watch?v=XrVSxAahRg8)
