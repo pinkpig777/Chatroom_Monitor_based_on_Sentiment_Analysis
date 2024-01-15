@@ -4,7 +4,7 @@ import random
 from string import ascii_uppercase
 import json
 import datetime
-
+import process
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "hjhjsdahhds"
 socketio = SocketIO(app)
@@ -26,19 +26,20 @@ def home():
 
         if join != False and not code:
             return render_template("home.html", error="Please enter a room code.", code=code, name=name)
-        
+
         room = code
         if create != False:
             room = code
             rooms[room] = {"members": 0, "messages": []}
         elif code not in rooms:
             return render_template("home.html", error="Room does not exist.", code=code, name=name)
-        
+
         session["room"] = room
         session["name"] = name
         return redirect(url_for("room"))
 
     return render_template("home.html")
+
 
 @app.route("/room")
 def room():
@@ -48,21 +49,30 @@ def room():
 
     return render_template("room.html", code=room, messages=rooms[room]["messages"])
 
-@app.route('/process_message', methods=['POST'])  ##連接部分##
+
+@app.route('/process_message', methods=['POST'])  # 連接部分##
 def process_message():
     data = request.json
-    message = data.get('message') #get 前端的現在訊息
-
-    response_data = {"result": f"Received message: {message}"} #f後都在回傳到顯示的地方
+    message = data.get('message')  # get 前端的現在訊息
+    prediction = process.predict(message)  # 呼叫process.py的predict
+    label = prediction[0]
+    sentiment = prediction[1]
+    if sentiment == 2:
+        response_data = {"result": "",
+                         "prediction": label}
+    else:
+        response_data = {"result": f"{message} is {sentiment}",
+                         "prediction": label}  # f後都在回傳到顯示的地方
     return jsonify(response_data)
 
+
 @socketio.on("message")
-def message(data):   
+def message(data):
     room = session.get("room")
     name = session.get("name")
     if room not in rooms:
-        return 
-    
+        return
+
     content = {
         "name": session.get("name"),
         "message": data["data"],
@@ -71,6 +81,7 @@ def message(data):
     send(content, to=room)
     rooms[room]["messages"].append(content)
     print(f"{session.get('name')} said: {data['data']}")
+
 
 @socketio.on("connect")
 def connect(auth):
@@ -81,11 +92,12 @@ def connect(auth):
     if room not in rooms:
         leave_room(room)
         return
-    
+
     join_room(room)
     send({"name": name, "message": "has entered the room"}, to=room)
     rooms[room]["members"] += 1
     print(f"{name} joined room {room}")
+
 
 @socketio.on("disconnect")
 def disconnect():
@@ -97,12 +109,11 @@ def disconnect():
         rooms[room]["members"] -= 1
         if rooms[room]["members"] <= 0:
             del rooms[room]
-    
+
     send({"name": name, "message": "has left the room"}, to=room)
     print(f"{name} has left the room {room}")
 
 
-
 if __name__ == "__main__":
-    socketio.run(app, debug=True)
-
+    socketio.run(app, debug=False)
+    # print("hi")

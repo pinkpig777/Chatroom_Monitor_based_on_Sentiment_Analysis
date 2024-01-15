@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 
 
-<title>bs4 simple chat app - Bootdey.com</title>
+<title>Chatroom</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -171,7 +171,22 @@
           })
           .then(response => response.json())
           .then(data => {
+              let prediction = data.prediction;
+              const wordElement = document.getElementById('typing-indicator');
+              if (prediction === 0){
+                //NEGATIVE
+                wordElement.style.backgroundColor = "rgb(250, 64, 17)";
+                // wordElement.style.backgroundColor = "rgb(255, 0, 0)";
+              }else if (prediction === 1){
+                //POSTIVE
+                wordElement.style.backgroundColor = "rgb(114, 250, 17)";
+                // wordElement.style.backgroundColor = "rgb(0, 255, 0)";
+              }else{
+                //NEUTRAL
+                wordElement.style.backgroundColor = "rgb(194, 246, 241)";
+              }
               callback(data.result); //回傳地方
+              
           })
           .catch(error => console.error('Error:', error));
       }, 500); //每0.5秒傳入一次
