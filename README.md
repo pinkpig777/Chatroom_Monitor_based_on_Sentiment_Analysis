@@ -9,7 +9,7 @@ Install the corresponding transformers
 > We use torch==2.1.1 and transformers==4.36.2
 
 ```
-cd
+cd chatroom_demo
 pip install -r requirments.txt
 ```
 
