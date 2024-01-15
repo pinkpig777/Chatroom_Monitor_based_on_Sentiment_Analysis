@@ -24,6 +24,8 @@ and place it under current directory.
 
 ## Usage
 
-1. Access the home page at http://127.0.0.1:5000.
-2. Enter your name, room code (if joining a room), and choose to create or join a room.
-3. Start chatting. And you can get some advices of your typing.
+
+1. run `python main.py`
+2. Access the home page at http://127.0.0.1:5000.
+3. Enter your name, room code (if joining a room), and choose to create or join a room.
+4. Start chatting. And you can get some advices of your typing.
