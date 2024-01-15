@@ -29,3 +29,7 @@ and place it under current directory.
 2. Access the home page at http://127.0.0.1:5000.
 3. Enter your name, room code (if joining a room), and choose to create or join a room.
 4. Start chatting. And you can get some advices of your typing.
+
+## Application Example
+
+{%youtube XrVSxAahRg8 %}
