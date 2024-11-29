@@ -4,6 +4,7 @@
 [![Alt text for your video](http://img.youtube.com/vi/XrVSxAahRg8/0.jpg)](https://www.youtube.com/watch?v=XrVSxAahRg8)
 
 This frontend demo application is designed to provide real-time sentiment analysis feedback to users in a chatroom-like interface. 
+
 It leverages the power of Socket.IO and Flask to establish a seamless communication channel between the frontend and backend.
 
 ## Key Features
