@@ -35,7 +35,7 @@ Install the corresponding transformers
 
 ```
 git clone https://github.com/pinkpig777/Chatroom_Monitor_based_on_Sentiment_Analysis.git
-cd chatroom_demo
+cd Chatroom_Monitor_based_on_Sentiment_Analysis
 pip install -r requirments.txt
 ```
 
@@ -43,5 +43,11 @@ Download the checkpoint from
 
 https://drive.google.com/file/d/1f2PraeSnAcOMcknXZ92KpAzmgnvK80ff/view?usp=drive_link
 
-and place it under current directory.
+and place it under the current directory.
 
+## Usage
+
+1. run `python main.py`
+2. Access the home page at http://127.0.0.1:5000.
+3. Enter your name, room code (if joining a room), and choose to create or join a room.
+4. Start chatting. And you can get some advices of your typing.
