@@ -1,19 +1,19 @@
-## Chatroom monitor based on sentiment analysis
+# Chatroom Monitor Based on Sentiment Analysis
 
-### Overview
+## Overview
 [![Alt text for your video](http://img.youtube.com/vi/XrVSxAahRg8/0.jpg)](https://www.youtube.com/watch?v=XrVSxAahRg8)
 
 This frontend demo application is designed to provide real-time sentiment analysis feedback to users in a chatroom-like interface. 
 It leverages the power of Socket.IO and Flask to establish a seamless communication channel between the frontend and backend.
 
-### Key Features
+## Key Features
 
 * Real-time Sentiment Analysis
 * Intuitive Interface
 * Robust Backend Integration
 * Efficient Communication
 
-### How it Works
+## How it Works
 
 1. **User Input:** The user enters text into the chat input field.
 2. **Frontend Processing:** The frontend sends the input text to the backend via a Socket.IO message.
@@ -21,12 +21,12 @@ It leverages the power of Socket.IO and Flask to establish a seamless communicat
 4. **Result Transmission:** The backend sends the sentiment analysis result back to the frontend via Socket.IO.
 5. **Frontend Display:** The frontend displays the sentiment analysis result in the chat interface.
 
-### Technical Stack
+## Technical Stack
 
 * **Frontend:** HTML, CSS, JavaScript
 * **Backend:** Flask, Socket.IO
 
-### Getting Started
+## Getting Started
 Install torch>2.0 with your CUDA version
 
 Install the corresponding transformers
