@@ -1,7 +1,7 @@
 ## Chatroom monitor based on sentiment analysis
 
 ### Overview
-
+[![Alt text for your video](http://img.youtube.com/vi/XrVSxAahRg8/0.jpg)](https://www.youtube.com/watch?v=XrVSxAahRg8)
 This frontend demo application is designed to provide real-time sentiment analysis feedback to users in a chatroom-like interface. 
 It leverages the power of Socket.IO and Flask to establish a seamless communication channel between the frontend and backend.
 
@@ -26,19 +26,20 @@ It leverages the power of Socket.IO and Flask to establish a seamless communicat
 * **Backend:** Flask, Socket.IO
 
 ### Getting Started
+Install torch>2.0 with your CUDA version
 
-[Provide instructions on how to set up the development environment, including installing dependencies and configuring the backend connection.]
+Install the corresponding transformers
 
-### Contributing
+> We use torch==2.1.1 and transformers==4.36.2
 
-We welcome contributions to improve this project. Please follow these guidelines:
+```
+cd chatroom_demo
+pip install -r requirments.txt
+```
 
-1. **Fork the Repository:** Create a fork of this repository on GitHub.
-2. **Create a Branch:** Create a new branch for your feature or bug fix.
-3. **Make Changes:** Commit your changes to your branch.
-4. **Push to Your Fork:** Push your branch to your forked repository.
-5. **Create a Pull Request:** Submit a pull request to the main repository.
+Download the checkpoint from
 
-### License
+https://drive.google.com/file/d/1f2PraeSnAcOMcknXZ92KpAzmgnvK80ff/view?usp=drive_link
 
-[Specify the license, e.g., MIT]
+and place it under current directory.
+
