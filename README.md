@@ -34,6 +34,7 @@ Install the corresponding transformers
 > We use torch==2.1.1 and transformers==4.36.2
 
 ```
+git clone https://github.com/pinkpig777/Chatroom_Monitor_based_on_Sentiment_Analysis.git
 cd chatroom_demo
 pip install -r requirments.txt
 ```
