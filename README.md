@@ -23,7 +23,7 @@ It leverages the power of Socket.IO and Flask to establish a seamless communicat
 
 ## Technical Stack
 
-* **Frontend:** HTML, CSS, JavaScript
+* **Frontend:** HTML, CSS
 * **Backend:** Flask, Socket.IO
 
 ## Getting Started
